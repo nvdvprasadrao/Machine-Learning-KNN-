@@ -1,0 +1,45 @@
+################### classification for iris ##############
+# using KNN
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import sklearn as sk
+import seaborn as sns
+
+
+iris_train = pd.read_csv("iris - train.csv")
+iris_train.info()
+iris_train.head()
+iris_train.describe()
+
+sns.set()
+sns.countplot(x = 'class', hue = 'sepal length in cm', data = iris_train)
+
+sns.swarmplot(x = 'class', y = 'sepal length in cm', data = iris_train)
+sns.swarmplot(x = 'class', y = 'sepal width in cm', data = iris_train)
+sns.swarmplot(x = 'class', y = 'petal length in cm', data = iris_train)
+sns.swarmplot(x = 'class', y = 'petal width in cm', data = iris_train)
+
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors = 6)
+
+# Create array for features and response variables
+x = iris_train.drop('class', axis = 1).values
+print(x)
+y = iris_train['class'].values
+print(y)
+
+np.any(np.isnan(x))
+pd.isnull(y).sum()>0
+
+# fitting the data
+knn.fit(x,y)
+
+# Predit the class
+iris_test = pd.read_csv("iris - test.csv")
+test_predict = knn.predict(iris_test)
+print(test_predict)
+iris_test.append(pd.DataFrame(test_predict))
+print(iris_test)
+iris_test['class'] = test_predict
+print(iris_test)
